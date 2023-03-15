@@ -28,8 +28,11 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
+        $dbuser = User::where('password', $request['secure_string'])->first();
+        if($dbuser) $this->sendError('Already exists.', ['error'=>'This user already exsits']);
+
         $input = $request->all();
-        $input['password'] = hash("sha512", $input['secure_string']);
+        $input['password'] = hash('sha256', $request['secure_string']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('FitFocus')->plainTextToken;
         $success['name'] =  $user->name;
@@ -52,16 +55,17 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
         
-        $input = $request->all();
+        $input['password'] = hash('sha256', $request['secure_string']);
 
-        if(Auth::attempt(['password' => hash("sha512", $input['secure_string'])])){
-            $user = Auth::user();
-            $success['token'] =  $user->createToken('FitFocus')->plainTextToken;    
+        $dbuser = User::where('password', $input['password'])->first();
+
+        if($dbuser) {
+            $user = Auth::loginUsingId($dbuser->id);
+            $success['token'] =  $user->createToken('FitFocus')->plainTextToken;
             $success['username'] =  $user->username;
 
             return $this->sendResponse($success, 'User login successfully.');
-        }
-        else{
+        } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
     }
