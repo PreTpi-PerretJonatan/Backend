@@ -18,5 +18,7 @@ class Workout extends Model
     protected $fillable = [
         'name',
         'approximate_duration',
+        'cover_image_url',
+        'series'
     ];
 }

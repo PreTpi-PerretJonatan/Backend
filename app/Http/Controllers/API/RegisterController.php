@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Hash;
+use Illuminate\Support\Str;
 use Validator;
 
 class RegisterController extends BaseController
@@ -29,12 +30,14 @@ class RegisterController extends BaseController
         }
 
         $dbuser = User::where('password', $request['secure_string'])->first();
-        if($dbuser) $this->sendError('Already exists.', ['error'=>'This user already exsits']);
+        if($dbuser) return $this->sendError('Already exists.', ['error'=>'This user already exsits']);
 
         $input = $request->all();
         $input['password'] = hash('sha256', $request['secure_string']);
+        $token = Str::random(40);
+        $input['api_token'] = $token;
         $user = User::create($input);
-        $success['token'] =  $user->createToken('FitFocus')->plainTextToken;
+        $success['token'] = $token;
         $success['name'] =  $user->name;
 
         return $this->sendResponse($success, 'User register successfully.');
@@ -61,8 +64,13 @@ class RegisterController extends BaseController
 
         if($dbuser) {
             $user = Auth::loginUsingId($dbuser->id);
-            $success['token'] =  $user->createToken('FitFocus')->plainTextToken;
+            $token = Str::random(40);
+            $success['token'] =  $token;
             $success['username'] =  $user->username;
+            $user->update([
+                'api_token' => $token,
+                'updated_at' => now()
+            ]);
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {

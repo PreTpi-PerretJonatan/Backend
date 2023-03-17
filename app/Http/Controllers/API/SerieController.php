@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Serie;
 use Hamcrest\Text\IsEqualIgnoringWhiteSpace;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -9,32 +10,33 @@ use App\Models\Workout;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
-class WorkoutController extends BaseController{
+class SerieController extends BaseController{
 
     public function store(Request $request){
         $input = $request->all();
         $validator = Validator::make($input, [
             'name' => 'required',
-            'approximate_duration' => 'required',
-            'cover_image_url' => 'required',
-            'series' => 'required'
+            'sets_number' => 'required',
+            'time_between_sets' => 'required',
+            'time_after_sets' => 'required',
+            'exercise' => 'required'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $workout = Workout::create($input);
-        return $this->sendResponse($workout->toArray(), 'Workout created successfully.');
+        $serie = Serie::create($input);
+        return $this->sendResponse($serie->toArray(), 'Serie created successfully.');
     }
 
     public function showall(){
-        $workouts = Workout::all();
+        $series = Serie::all();
 
-        if (is_null($workouts)) {
-            return $this->sendError('No workouts found.');
+        if (is_null($series)) {
+            return $this->sendError('No serie found.');
         }
 
-        return $this->sendResponse($workouts->toArray(), 'Workout retrieved successfully.');
+        return $this->sendResponse($series->toArray(), 'Workout retrieved successfully.');
     }
 }
