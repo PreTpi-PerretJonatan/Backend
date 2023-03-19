@@ -21,8 +21,7 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required',
-            'secure_string' => 'required',
-            'policies' => 'nullable'
+            'secure_string' => 'required'
         ]);
 
         if($validator->fails()){
@@ -36,6 +35,7 @@ class RegisterController extends BaseController
         $input['password'] = hash('sha256', $request['secure_string']);
         $token = Str::random(40);
         $input['api_token'] = $token;
+        $input['policies'] = $request['policies'] == null ? "" : $request['policies'];
         $user = User::create($input);
         $success['token'] = $token;
         $success['name'] =  $user->name;
