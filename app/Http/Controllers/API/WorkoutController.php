@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Exercise;
+use App\Models\Serie;
 use Hamcrest\Text\IsEqualIgnoringWhiteSpace;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -35,6 +37,15 @@ class WorkoutController extends BaseController{
             return $this->sendError('No workouts found.');
         }
 
-        return $this->sendResponse($workouts->toArray(), 'Workout retrieved successfully.');
+        foreach($workouts as $workout){
+            $series = $workout->series;
+            foreach($series as $serie){
+                $exercise = $serie->exercise;
+                $serie->exercise = $exercise->toArray();
+            }
+            $workout->series = $series->toArray();
+        }
+
+        return $this->sendResponse($workouts->toArray(), 'Workouts retrieved successfully.');
     }
 }

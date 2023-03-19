@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Workout extends Model
 {
@@ -21,4 +22,9 @@ class Workout extends Model
         'cover_image_url',
         'series'
     ];
+
+    public function series() : BelongsToMany
+    {
+        return $this->belongsToMany(Serie::class);
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Serie extends Model
 {
@@ -17,5 +19,13 @@ class Serie extends Model
         'exercise'
     ];
 
-    public Exercise $exercise;
+    public function exercise(): BelongsTo
+    {
+        return $this->belongsTo(Exercise::class);
+    }
+
+    public function workouts() : BelongsToMany
+    {
+        return $this->belongsToMany(Workout::class);
+    }
 }
