@@ -19,7 +19,7 @@ class SerieController extends BaseController{
             'sets_number' => 'required',
             'time_between_sets' => 'required',
             'time_after_sets' => 'required',
-            'exercise' => 'required'
+            'exercise_id' => 'required'
         ]);
 
         if($validator->fails()){

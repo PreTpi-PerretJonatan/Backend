@@ -16,7 +16,7 @@ class Serie extends Model
         'sets_number',
         'time_between_sets',
         'time_after_sets',
-        'exercise'
+        'exercise_id'
     ];
 
     public function exercise(): BelongsTo
