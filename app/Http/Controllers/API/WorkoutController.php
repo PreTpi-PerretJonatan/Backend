@@ -18,8 +18,7 @@ class WorkoutController extends BaseController{
         $validator = Validator::make($input, [
             'name' => 'required',
             'approximate_duration' => 'required',
-            'cover_image_url' => 'required',
-            'series' => 'required'
+            'cover_image_url' => 'required'
         ]);
 
         if($validator->fails()){
