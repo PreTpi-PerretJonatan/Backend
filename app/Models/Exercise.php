@@ -11,6 +11,7 @@ class Exercise extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'repetitions',
         'path_to_cover_image',

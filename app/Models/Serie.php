@@ -12,6 +12,7 @@ class Serie extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'sets_number',
         'time_between_sets',

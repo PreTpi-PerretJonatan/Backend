@@ -17,7 +17,9 @@ class Workout extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
+        'id_type',
         'approximate_duration',
         'cover_image_url',
         'series'
