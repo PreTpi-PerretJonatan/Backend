@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\WorkoutController;
 use App\Http\Controllers\API\SerieController;
 use App\Http\Controllers\API\ExerciseController;
@@ -23,22 +23,24 @@ Route::middleware('auth:api')->post('/user', function(Request $request) {
     return $request->user();
 });
 
-Route::controller(RegisterController::class)->group(function () {
+Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
 });
 
-Route::middleware('auth:api')->controller(WorkoutController::class)->group(function () {
-    Route::post('workouts', 'showall');
-    Route::post('add_workout', 'store');
-});
+Route::middleware('auth:api')->group(function () {
+    Route::prefix('workouts')->group(function () {
+        Route::get('/', [WorkoutController::class, 'showall']);
+        Route::post('add', [WorkoutController::class, 'store']);
+    });
 
-Route::middleware('auth:api')->controller(SerieController::class)->group(function () {
-    Route::post('series', 'showall');
-    Route::post('add_serie', 'store');
-});
+    Route::prefix('series')->group(function () {
+        Route::get('/', [SerieController::class, 'showall']);
+        Route::post('add', [SerieController::class, 'store']);
+    });
 
-Route::middleware('auth:api')->controller(ExerciseController::class)->group(function () {
-    Route::post('exercises', 'showall');
-    Route::post('add_exercise', 'store');
+    Route::prefix('exercises')->group(function () {
+        Route::get('/', [ExerciseController::class, 'showall']);
+        Route::post('add', [ExerciseController::class, 'store']);
+    });
 });

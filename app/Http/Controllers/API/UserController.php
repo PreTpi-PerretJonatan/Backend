@@ -10,7 +10,7 @@ use Hash;
 use Illuminate\Support\Str;
 use Validator;
 
-class RegisterController extends BaseController
+class UserController extends BaseController
 {
     /**
      * Register api
