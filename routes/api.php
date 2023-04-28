@@ -28,6 +28,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('login', 'login');
 });
 
+//  Workout related routes
 Route::middleware('auth:api')->group(function () {
     Route::prefix('workouts')->group(function () {
         Route::get('/', [WorkoutController::class, 'showall']);
