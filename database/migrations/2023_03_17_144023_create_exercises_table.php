@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('repetitions');
+            $table->string('diffuculty');
             $table->string('path_to_cover_image');
             $table->string('path_to_video');
             $table->timestamps();

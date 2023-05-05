@@ -28,17 +28,18 @@ class UserController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $dbuser = User::where('password', $request['secure_string'])->first();
+        $dbuser = User::where('password', hash('sha256', $request['secure_string']))->first();
         if($dbuser) return $this->sendError('Already exists.', ['error'=>'This user already exsits']);
 
         $input = $request->all();
+        $input['username'] = $request['username'];
         $input['password'] = hash('sha256', $request['secure_string']);
         $token = Str::random(40);
         $input['api_token'] = $token;
         $input['policies'] = $request['policies'] == null ? "" : $request['policies'];
         $user = User::create($input);
         $success['token'] = $token;
-        $success['name'] =  $user->name;
+        $success['username'] =  $user->username;
 
         return $this->sendResponse($success, 'User register successfully.');
     }
